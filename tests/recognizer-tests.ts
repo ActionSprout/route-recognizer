@@ -728,6 +728,14 @@ QUnit.test("Dynamic routes without leading `/` and single length param are recog
   resultsMatch(assert, router.recognize("foo/1"), [{ handler: handler, params: { id: "1" }, isDynamic: true }]);
 });
 
+// BUG: https://github.com/tildeio/route-recognizer/issues/125
+QUnit.test("Dynamic routes with a trailing extension", (assert: Assert) => {
+  let handler = {};
+  let router = new RouteRecognizer();
+
+  router.add([{ path: "/foo/:id.json", handler: handler }]);
+  resultsMatch(assert, router.recognize("/foo/1.json"), [{ handler: handler, params: { id: "1" }, isDynamic: true }]);
+});
 
 QUnit.module("Route Generation", hooks => {
   let router: RouteRecognizer;
